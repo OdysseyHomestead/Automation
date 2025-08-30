@@ -1,0 +1,49 @@
+services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    environment:
+      - API_PORT=8000
+    command: ["uv","run","uvicorn","src.main:app","--host","0.0.0.0","--port","8000"]
+    ports:
+      - "8000:8000"
+
+  agent:
+    build:
+      context: .
+      dockerfile: apps/agent-orchestrator/Dockerfile
+    environment:
+      - AGENT_PORT=8080
+    ports:
+      - "8080:8080"
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      args:
+        NEXT_PUBLIC_API_BASE: http://api:8000
+    environment:
+      - NEXT_PUBLIC_API_BASE=http://api:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+      - agent
+
+  worker:
+    build:
+      context: .
+      dockerfile: apps/worker/Dockerfile
+    environment:
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - redis
+    # The image CMD runs the CLI without a subcommand; append "start" here
+    command: ["uv","run","python","-m","src.interfaces.cli.main","start"]

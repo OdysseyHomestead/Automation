@@ -1,0 +1,24 @@
+services:
+  web:
+    command: pnpm dev
+    volumes:
+      - ../../apps/web:/app/apps/web
+      - ../../packages:/app/packages
+      - ../../tsconfig.base.json:/app/tsconfig.base.json
+
+  agent-orchestrator:
+    command: pnpm dev
+    volumes:
+      - ../../apps/agent-orchestrator:/app/apps/agent-orchestrator
+      - ../../packages:/app/packages
+      - ../../tsconfig.base.json:/app/tsconfig.base.json
+
+  api:
+    command: uv run uvicorn src.app:app --host 0.0.0.0 --port 8000 --reload
+    volumes:
+      - ../../apps/api/src:/app/src
+
+  worker:
+    command: uv run python -m src.interfaces.cli.main start
+    volumes:
+      - ../../apps/worker/src:/app/src

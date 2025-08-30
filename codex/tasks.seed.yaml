@@ -1,0 +1,12 @@
+version: 1
+tasks:
+  - id: api-add-user-endpoints
+    title: Add CRUD endpoints for User
+    service: api
+    steps:
+      - design domain + schema
+      - implement app use-cases
+      - add adapters for persistence
+      - expose HTTP routes
+      - add tests
+

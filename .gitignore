@@ -1,0 +1,35 @@
+# Node
+node_modules/
+pnpm-lock.yaml
+.pnpm-store/
+dist/
+.next/
+.turbo/
+coverage/
+
+# Python
+__pycache__/
+.venv/
+.python-version
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+*.pid
+*.pid.lock
+docker-data/
+
+# Env
+.env
+*.env
+!infra/docker/.env.example
+
+# IDE
+.idea/
+.vscode/
+

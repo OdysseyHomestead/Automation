@@ -1,0 +1,107 @@
+name: automation
+
+networks:
+  public:
+    driver: bridge
+  internal:
+    driver: bridge
+
+volumes:
+  mongo_data: {}
+  qdrant_data: {}
+
+services:
+  traefik:
+    image: traefik:v3.1
+    command:
+      - --api.dashboard=true
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:8080
+    ports:
+      - "8080:8080"
+    networks:
+      - public
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  web:
+    build:
+      context: ../..
+      dockerfile: apps/web/Dockerfile
+    environment:
+      NEXT_PUBLIC_API_BASE: ${NEXT_PUBLIC_API_BASE}
+    depends_on:
+      - api
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.web.rule=Host(`web.localhost`)
+      - traefik.http.services.web.loadbalancer.server.port=3000
+    networks:
+      - public
+
+  agent-orchestrator:
+    build:
+      context: ../..
+      dockerfile: apps/agent-orchestrator/Dockerfile
+    environment:
+      AGENT_PORT: 8080
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.agent.rule=Host(`agent.localhost`)
+      - traefik.http.services.agent.loadbalancer.server.port=8080
+    networks:
+      - public
+
+  api:
+    build:
+      context: ../..
+      dockerfile: apps/api/Dockerfile
+    environment:
+      API_PORT: ${API_PORT}
+      MONGODB_URI: ${MONGODB_URI}
+      QDRANT_URL: ${QDRANT_URL}
+      REDIS_URL: ${REDIS_URL}
+      APP_VERSION: ${APP_VERSION}
+    depends_on:
+      - mongo
+      - qdrant
+      - redis
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.api.rule=Host(`api.localhost`)
+      - traefik.http.services.api.loadbalancer.server.port=8000
+    networks:
+      - public
+      - internal
+
+  worker:
+    build:
+      context: ../..
+      dockerfile: apps/worker/Dockerfile
+    environment:
+      REDIS_URL: ${REDIS_URL}
+    depends_on:
+      - redis
+    networks:
+      - internal
+
+  mongo:
+    image: mongo:7
+    command: ["--quiet"]
+    networks:
+      - internal
+    volumes:
+      - mongo_data:/data/db
+
+  qdrant:
+    image: qdrant/qdrant:v1.8.4
+    networks:
+      - internal
+    volumes:
+      - qdrant_data:/qdrant/storage
+
+  redis:
+    image: redis:7-alpine
+    networks:
+      - internal

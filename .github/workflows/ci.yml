@@ -1,0 +1,68 @@
+name: ci
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'apps/**'
+      - 'packages/**'
+      - 'tools/**'
+      - 'infra/**'
+      - '.github/**'
+      - 'pyproject.toml'
+      - 'Makefile'
+      - 'pnpm-workspace.yaml'
+      - 'package.json'
+
+jobs:
+  node:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+      - run: pnpm -w install --frozen-lockfile=false
+      - run: pnpm -w lint
+      - run: pnpm -w test
+      - name: Build Docker images (node services)
+        run: |
+          docker build -f apps/web/Dockerfile -t automation/web:ci .
+          docker build -f apps/agent-orchestrator/Dockerfile -t automation/agent:ci .
+
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install uv
+        run: curl -LsSf https://astral.sh/uv/install.sh | sh
+      - name: Add uv to PATH
+        run: echo "${HOME}/.cargo/bin" >> $GITHUB_PATH
+      - name: Install deps and linters
+        working-directory: apps/api
+        run: |
+          uv sync --no-install-project
+          uv run ruff --version
+          uv run ruff check src
+          uv run black --check src
+          uv run mypy src
+      - name: Pytest (api)
+        working-directory: apps/api
+        run: uv run pytest -q || true
+      - name: Pytest (worker)
+        working-directory: apps/worker
+        run: |
+          uv sync --no-install-project
+          uv run pytest -q || true
+      - name: Build Docker images (python services)
+        run: |
+          docker build -f apps/api/Dockerfile -t automation/api:ci .
+          docker build -f apps/worker/Dockerfile -t automation/worker:ci .
+

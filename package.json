@@ -1,0 +1,44 @@
+{
+  "name": "automation",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@9.0.0",
+  "scripts": {
+    "build": "pnpm -r --filter ./apps/** --filter ./packages/** build",
+    "dev": "pnpm -r --filter ./apps/** dev",
+    "lint": "pnpm -r lint",
+    "test": "pnpm -r test",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "19.3.0",
+    "@commitlint/config-conventional": "19.2.2",
+    "@types/node": "20.12.12",
+    "@typescript-eslint/parser": "7.18.0",
+    "eslint": "8.57.1",
+    "eslint-config-prettier": "9.1.0",
+    "eslint-import-resolver-typescript": "3.6.3",
+    "eslint-plugin-import": "2.29.1",
+    "eslint-plugin-unused-imports": "3.1.0",
+    "husky": "9.1.4",
+    "lint-staged": "15.2.7",
+    "prettier": "3.3.3",
+    "typescript": "5.5.4",
+    "vitest": "1.6.0"
+  },
+  "lint-staged": {
+    "$schema": "https://json.schemastore.org/lintstaged.json",
+    "**/*.{ts,tsx,js,jsx}": [
+      "eslint --fix --max-warnings=0",
+      "prettier --write"
+    ],
+    "**/*.{json,md,yml,yaml}": [
+      "prettier --write"
+    ]
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  }
+}
