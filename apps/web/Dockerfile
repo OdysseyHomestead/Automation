@@ -15,9 +15,6 @@ FROM deps AS build
 COPY apps/web ./apps/web
 WORKDIR /app/apps/web
 RUN [ -d node_modules ] || ln -s /app/node_modules ./node_modules
-# Inject public API base at build time so it’s baked into the bundle
-ARG NEXT_PUBLIC_API_BASE
-ENV NEXT_PUBLIC_API_BASE=${NEXT_PUBLIC_API_BASE}
 RUN pnpm add next@14.2.5
 RUN pnpm build
 
@@ -30,3 +27,4 @@ COPY --from=deps /app/apps/web/node_modules /app/apps/web/node_modules
 WORKDIR /app/apps/web
 EXPOSE 3000
 CMD ["pnpm","start"]
+

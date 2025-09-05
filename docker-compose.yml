@@ -10,7 +10,17 @@ services:
       dockerfile: apps/api/Dockerfile
     environment:
       - API_PORT=8000
-    command: ["uv","run","uvicorn","src.main:app","--host","0.0.0.0","--port","8000"]
+    command:
+      [
+        "uv",
+        "run",
+        "uvicorn",
+        "src.main:app",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8000",
+      ]
     ports:
       - "8000:8000"
 
@@ -19,9 +29,9 @@ services:
       context: .
       dockerfile: apps/agent-orchestrator/Dockerfile
     environment:
-      - AGENT_PORT=8080
+      - AGENT_PORT=8085
     ports:
-      - "8080:8080"
+      - "8085:8085"
 
   web:
     build:
@@ -46,4 +56,4 @@ services:
     depends_on:
       - redis
     # The image CMD runs the CLI without a subcommand; append "start" here
-    command: ["uv","run","python","-m","src.interfaces.cli.main","start"]
+    command: ["uv", "run", "python", "-m", "src.interfaces.cli.main", "start"]
