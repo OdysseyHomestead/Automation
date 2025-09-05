@@ -18,14 +18,18 @@ export const BitcoinWidget: React.FC = () => {
   const fetchPrice = useCallback(async () => {
     try {
       const res = await fetch(
-        "https://api.coindesk.com/v1/bpi/currentprice/USD.json",
+        "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd",
       );
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
+      const price = data?.bitcoin?.usd;
+      if (typeof price !== "number") {
+        throw new Error("Invalid price data");
+      }
       setInfo({
-        price: data.bpi.USD.rate_float,
-        currency: data.bpi.USD.code,
-        lastUpdated: new Date(data.time.updatedISO).toLocaleString(),
+        price,
+        currency: "USD",
+        lastUpdated: new Date().toLocaleString(),
       });
       setError(null);
     } catch (err) {
