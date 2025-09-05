@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 
 interface PriceInfo {
   price: number | null;
@@ -15,7 +15,7 @@ export const BitcoinWidget: React.FC = () => {
   });
   const [error, setError] = useState<string | null>(null);
 
-  const fetchPrice = async () => {
+  const fetchPrice = useCallback(async () => {
     try {
       const res = await fetch(
         "https://api.coindesk.com/v1/bpi/currentprice/USD.json",
@@ -25,20 +25,20 @@ export const BitcoinWidget: React.FC = () => {
       setInfo({
         price: data.bpi.USD.rate_float,
         currency: data.bpi.USD.code,
-        lastUpdated: data.time.updated,
+        lastUpdated: new Date(data.time.updatedISO).toLocaleString(),
       });
       setError(null);
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
       setError(message);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchPrice();
     const id = setInterval(fetchPrice, 60000);
     return () => clearInterval(id);
-  }, []);
+  }, [fetchPrice]);
 
   if (error) {
     return <p>Error fetching price: {error}</p>;
@@ -48,11 +48,14 @@ export const BitcoinWidget: React.FC = () => {
     return <p>Loading...</p>;
   }
 
+  const formattedPrice = price.toLocaleString(undefined, {
+    style: "currency",
+    currency,
+  });
+
   return (
     <div>
-      <p>
-        Price: {price} {currency}
-      </p>
+      <p>Price: {formattedPrice}</p>
       <p>Last update: {lastUpdated}</p>
     </div>
   );
