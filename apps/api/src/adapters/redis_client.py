@@ -11,4 +11,3 @@ class RedisClient:
             return bool(self._client.ping())
         except Exception:
             return False
-

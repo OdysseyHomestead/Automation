@@ -1,7 +1,8 @@
 "use client";
-import React from 'react';
-import { DashboardGrid, WidgetContainer } from '../components';
-import styles from './index.module.css';
+import React from "react";
+import { DashboardGrid, WidgetContainer } from "../components";
+import { BitcoinWidget } from "../../bitcoin/BitcoinWidget";
+import styles from "./index.module.css";
 
 type Widget = {
   id: string;
@@ -16,11 +17,17 @@ export const registerWidget = (widget: Widget) => {
   widgetRegistry.push(widget);
 };
 
+registerWidget({
+  id: "bitcoin-price",
+  title: "Bitcoin Price",
+  render: () => <BitcoinWidget />,
+});
+
 export function HomeClient({ status }: { status: string }) {
   const widgets: Widget[] = [
     {
-      id: 'api-health',
-      title: 'API Health',
+      id: "api-health",
+      title: "API Health",
       render: () => <p>API Health: {status}</p>,
       refresh: () => location.reload(),
     },
@@ -40,4 +47,3 @@ export function HomeClient({ status }: { status: string }) {
     </div>
   );
 }
-

@@ -2,7 +2,6 @@
 node_modules/
 # Occasionally created by mistakes/tools; ignore singular form too
 node_module/
-pnpm-lock.yaml
 .pnpm-store/
 dist/
 .next/
