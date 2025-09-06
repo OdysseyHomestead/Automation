@@ -4,4 +4,3 @@ class QdrantClientAdapter:
 
     async def ping(self) -> dict[str, str]:
         return {"url": self._url, "status": "stub"}
-
