@@ -1,0 +1,37 @@
+name: infra-smoke
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    paths:
+      - "infra/**"
+      - ".github/workflows/infra-smoke.yml"
+
+jobs:
+  pocketbase:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Start PocketBase
+        env:
+          PB_ADMIN_EMAIL: ci@example.com
+          PB_ADMIN_PASSWORD: ChangeMe!Strong1
+        run: docker compose up -d pocketbase
+      - name: Smoke test
+        run: |
+          success=false
+          for i in {1..10}; do
+            if curl -fsS http://localhost:8090/api/health; then
+              success=true
+              break
+            fi
+            sleep 1
+          done
+          if [ "$success" != "true" ]; then
+            echo "PocketBase did not become healthy" >&2
+            exit 1
+          fi
+      - name: Stop PocketBase
+        if: always()
+        run: docker compose down

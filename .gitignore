@@ -62,7 +62,7 @@ docker-data/
 # Env
 .env
 *.env
-!infra/docker/.env.example
+.env.example
 .env.local
 .env.*.local
 
