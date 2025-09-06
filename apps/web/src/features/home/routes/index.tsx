@@ -2,20 +2,13 @@
 import React from "react";
 import { DashboardGrid, WidgetContainer } from "../components";
 import { BitcoinWidget } from "../../bitcoin/BitcoinWidget";
+import { TaskListWidget } from "../../task-list/TaskListWidget";
+import {
+  getRegisteredWidgets,
+  registerWidget,
+  WidgetProps,
+} from "../../widgetRegistry";
 import styles from "./index.module.css";
-
-type Widget = {
-  id: string;
-  title: string;
-  render: () => React.ReactNode;
-  refresh?: () => void | Promise<void>;
-};
-
-const widgetRegistry: Widget[] = [];
-
-export const registerWidget = (widget: Widget) => {
-  widgetRegistry.push(widget);
-};
 
 registerWidget({
   id: "bitcoin-price",
@@ -23,15 +16,21 @@ registerWidget({
   render: () => <BitcoinWidget />,
 });
 
+registerWidget({
+  id: "task-list",
+  title: "Task List",
+  render: () => <TaskListWidget />,
+});
+
 export function HomeClient({ status }: { status: string }) {
-  const widgets: Widget[] = [
+  const widgets: WidgetProps[] = [
     {
       id: "api-health",
       title: "API Health",
       render: () => <p>API Health: {status}</p>,
       refresh: () => location.reload(),
     },
-    ...widgetRegistry,
+    ...getRegisteredWidgets(),
   ];
 
   return (
