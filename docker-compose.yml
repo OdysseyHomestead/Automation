@@ -62,6 +62,17 @@ services:
     build:
       context: .
       dockerfile: infra/pocketbase/Dockerfile
+    environment:
+      PB_ADMIN_EMAIL: ${PB_ADMIN_EMAIL:?set}
+      PB_ADMIN_PASSWORD: ${PB_ADMIN_PASSWORD:?set}
+    command: >
+      sh -c '
+        if ! /pb/pocketbase --dir /pb/pb_data admin list | grep -q "@"; then
+          echo "No admin found. Creating ${PB_ADMIN_EMAIL}...";
+          /pb/pocketbase --dir /pb/pb_data admin create "${PB_ADMIN_EMAIL}" "${PB_ADMIN_PASSWORD}";
+        fi;
+        exec /pb/pocketbase --dir /pb/pb_data serve --http 0.0.0.0:8090
+      '
     ports:
       - "8090:8090"
     volumes:

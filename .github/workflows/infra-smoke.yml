@@ -14,6 +14,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Start PocketBase
+        env:
+          PB_ADMIN_EMAIL: ci@example.com
+          PB_ADMIN_PASSWORD: ChangeMe!Strong1
         run: docker compose up -d pocketbase
       - name: Smoke test
         run: |
