@@ -17,10 +17,18 @@ jobs:
         run: docker compose -f infra/docker-compose.yml up -d
       - name: Smoke test
         run: |
+          success=false
           for i in {1..10}; do
-            curl -fsS http://localhost:8090/api/health && break
+            if curl -fsS http://localhost:8090/api/health; then
+              success=true
+              break
+            fi
             sleep 1
           done
+          if [ "$success" != "true" ]; then
+            echo "PocketBase did not become healthy" >&2
+            exit 1
+          fi
       - name: Stop PocketBase
         if: always()
         run: docker compose -f infra/docker-compose.yml down

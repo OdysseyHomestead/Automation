@@ -6,6 +6,12 @@
 docker compose -f infra/docker-compose.yml up -d
 ```
 
+If the image pull fails, authenticate to the GitHub Container Registry:
+
+```bash
+echo "$GITHUB_TOKEN" | docker login ghcr.io -u USERNAME --password-stdin
+```
+
 Visit [http://localhost:8090/\_/](http://localhost:8090/_/) to create the initial admin account.
 
 ## Backups

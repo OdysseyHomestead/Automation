@@ -3,10 +3,12 @@ import type { Task, TasksRepository } from "../core/TasksRepository";
 export class PocketBaseTasksRepo implements TasksRepository {
   private readonly baseURL: string;
   private readonly authToken: string;
+  private readonly userId: string;
 
-  constructor(baseURL: string, authToken: string) {
+  constructor(baseURL: string, authToken: string, userId: string) {
     this.baseURL = baseURL;
     this.authToken = authToken;
+    this.userId = userId;
   }
 
   private headers() {
@@ -30,7 +32,7 @@ export class PocketBaseTasksRepo implements TasksRepository {
 
   async listMine(): Promise<Task[]> {
     const url = new URL("/api/collections/tasks/records", this.baseURL);
-    url.searchParams.set("filter", "user=@request.auth.id");
+    url.searchParams.set("filter", `user='${this.userId}'`);
     url.searchParams.set("sort", "-updated");
     const res = await fetch(url, { headers: this.headers() });
     if (!res.ok) {
@@ -50,6 +52,7 @@ export class PocketBaseTasksRepo implements TasksRepository {
       status: "open",
       dueAt: input.dueAt,
       meta: input.meta,
+      user: this.userId,
     };
     const res = await fetch(`${this.baseURL}/api/collections/tasks/records`, {
       method: "POST",
