@@ -6,7 +6,7 @@
 docker compose -f infra/docker-compose.yml up -d
 ```
 
-If the image pull fails, authenticate to the GitHub Container Registry:
+The PocketBase image is public on GitHub Container Registry and usually pulls without authentication. If your environment blocks anonymous pulls, authenticate:
 
 ```bash
 echo "$GITHUB_TOKEN" | docker login ghcr.io -u USERNAME --password-stdin
