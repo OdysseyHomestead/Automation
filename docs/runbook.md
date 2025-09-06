@@ -6,24 +6,20 @@
 docker compose -f infra/docker-compose.yml up -d
 ```
 
-The PocketBase image is public on GitHub Container Registry and usually pulls without authentication. If your environment blocks anonymous pulls, authenticate:
-
-```bash
-echo "$GITHUB_TOKEN" | docker login ghcr.io -u USERNAME --password-stdin
-```
+This builds a PocketBase image from the official release archive and starts it on port `8090`.
 
 Visit [http://localhost:8090/\_/](http://localhost:8090/_/) to create the initial admin account.
 
 ### Quick manual run
 
-You can also pull and run PocketBase directly to verify your setup:
+To verify your setup without Compose:
 
 ```bash
-docker pull ghcr.io/pocketbase/pocketbase:v0.29.3
-docker run --name pb -p 8090:8090 -v pb_data:/pb_data -v pb_public:/pb_public ghcr.io/pocketbase/pocketbase:v0.29.3 serve --http 0.0.0.0:8090
+docker build -f infra/pocketbase/Dockerfile -t pocketbase-local infra/pocketbase
+docker run --name pb -p 8090:8080 -v pb_data:/pb/pb_data -v pb_public:/pb/pb_public pocketbase-local
 ```
 
-Open the admin UI at [http://localhost:8090/\_/](http://localhost:8090/_/) or check the health endpoint:
+Check the admin UI at [http://localhost:8090/\_/](http://localhost:8090/_/) or the health endpoint:
 
 ```bash
 curl http://localhost:8090/api/health

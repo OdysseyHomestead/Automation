@@ -1,19 +1,23 @@
 services:
   pocketbase:
-    image: ghcr.io/pocketbase/pocketbase:v0.29.3
-    command: ["serve", "--http", "0.0.0.0:8090"]
-    volumes:
-      - pb_data:/pb_data
-      - pb_public:/pb_public
-    ports:
-      - "8090:8090"
+    build:
+      context: ./pocketbase
+      args:
+        PB_VERSION: "0.29.3"
+    container_name: pocketbase
     restart: unless-stopped
+    ports:
+      - "8090:8080"
+    volumes:
+      - pb_data:/pb/pb_data
+      - pb_public:/pb/pb_public
     environment:
       - PB_SMTP_HOST=${PB_SMTP_HOST:-}
       - PB_SMTP_USER=${PB_SMTP_USER:-}
       - PB_SMTP_PASS=${PB_SMTP_PASS:-}
       - PB_SMTP_PORT=${PB_SMTP_PORT:-587}
       - PB_SMTP_FROM=${PB_SMTP_FROM:-noreply@example.com}
+
 volumes:
   pb_data:
   pb_public:
