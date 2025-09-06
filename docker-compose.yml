@@ -63,7 +63,7 @@ services:
       context: .
       dockerfile: infra/pocketbase/Dockerfile
     ports:
-      - "8090:8080"
+      - "8090:8090"
     volumes:
       - pb_data:/pb/pb_data
       - pb_public:/pb/pb_public

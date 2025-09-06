@@ -16,7 +16,7 @@ To verify your setup without Compose:
 
 ```bash
 docker build -f infra/pocketbase/Dockerfile -t pocketbase-local infra/pocketbase
-docker run --name pb -p 8090:8080 -v pb_data:/pb/pb_data -v pb_public:/pb/pb_public pocketbase-local
+docker run --name pb -p 8090:8090 -v pb_data:/pb/pb_data -v pb_public:/pb/pb_public pocketbase-local
 ```
 
 Check the admin UI at [http://localhost:8090/\_/](http://localhost:8090/_/) or the health endpoint:
