@@ -11,19 +11,13 @@ A professional monorepo hosting multiple deployable services plus shared package
 
 ## Quickstart
 
-1. Copy env
-
-```
-cp infra/docker/.env.example infra/docker/.env
-```
-
-2. Run stack (dev overrides enabled)
+1. Run stack (dev overrides enabled)
 
 ```
 docker compose -f infra/docker/compose.yml -f infra/docker/compose.dev.override.yml up --build
 ```
 
-3. Visit services (if Traefik uses 8083, append :8083)
+2. Visit services (if Traefik uses 8083, append :8083)
 
 - http://web.localhost:8083 → dashboard shows API health status
 - http://api.localhost:8083/health → {"status":"ok","service":"api"}
@@ -72,14 +66,13 @@ GitHub Actions runs lint, tests, and builds Docker images for all services on PR
 
 ## Smoke Test
 
-1. `cp infra/docker/.env.example infra/docker/.env`
-2. `docker compose -f infra/docker/compose.yml -f infra/docker/compose.dev.override.yml up --build`
-3. Visit (with :8083 if using port 8083):
+1. `docker compose -f infra/docker/compose.yml -f infra/docker/compose.dev.override.yml up --build`
+2. Visit (with :8083 if using port 8083):
    - http://web.localhost:8083 → shows API health status
    - http://api.localhost:8083/health → `{status:"ok"}`
    - http://agent.localhost:8083/agent/plan → returns a placeholder plan
-4. `docker compose logs worker` → see heartbeat every minute
-5. `pnpm -w lint && pnpm -w test` and `pytest` pass with sample tests.
+3. `docker compose logs worker` → see heartbeat every minute
+4. `pnpm -w lint && pnpm -w test` and `pytest` pass with sample tests.
 
 ## License
 

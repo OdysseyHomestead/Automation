@@ -2,11 +2,11 @@
 
 ## Running Locally
 
-Copy `.env.example` to `.env` and set the admin credentials:
+Create a `.env` file with the admin credentials:
 
 ```bash
-cp .env.example .env
-# edit .env with your real email and password
+PB_ADMIN_EMAIL=admin@example.com
+PB_ADMIN_PASSWORD="ChangeMe!Strong1"
 ```
 
 Start the service:
