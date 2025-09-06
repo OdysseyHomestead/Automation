@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+
 from .interfaces.http.health import router as health_router
 from .interfaces.http.v1 import router as v1_router
 
@@ -11,4 +12,3 @@ def create_app() -> FastAPI:
 
 
 app = create_app()
-
