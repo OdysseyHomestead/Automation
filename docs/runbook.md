@@ -2,13 +2,20 @@
 
 ## Running Locally
 
-Set the admin credentials (or place them in a `.env` file) and start the service:
+Copy `.env.example` to `.env` and set the admin credentials:
 
 ```bash
-PB_ADMIN_EMAIL=admin@example.com PB_ADMIN_PASSWORD="ChangeMe!Strong1" docker compose up -d pocketbase
+cp .env.example .env
+# edit .env with your real email and password
 ```
 
-The container mounts its data at `/pb/pb_data` and, on first run, creates an admin if none exists using the provided credentials. After the first successful start you may remove the variables; subsequent runs will use the persisted data.
+Start the service:
+
+```bash
+docker compose up -d pocketbase
+```
+
+The container mounts its data at `/pb/pb_data` and, on first run, creates an admin if none exists using the provided credentials. After the first successful start you may remove the credentials from `.env`; subsequent runs will use the persisted data.
 
 Visit [http://localhost:8090/\_/](http://localhost:8090/_/) to log in with the seeded admin.
 
@@ -42,7 +49,7 @@ To wipe all PocketBase data and start fresh:
 docker compose down
 docker volume rm automation_pb_data automation_pb_public
 docker volume prune  # removes anonymous volumes
-PB_ADMIN_EMAIL=admin@example.com PB_ADMIN_PASSWORD="ChangeMe!Strong1" docker compose up -d pocketbase
+docker compose up -d pocketbase
 ```
 
 ## Backups
