@@ -32,7 +32,7 @@ export const WidgetContainer: React.FC<WidgetContainerProps> = ({
           </Button>
         )}
       </div>
-      {children}
+      <div className={styles.content}>{children}</div>
     </div>
   );
 };
