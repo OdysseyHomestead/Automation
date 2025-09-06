@@ -3,6 +3,29 @@
   border-radius: 8px;
   padding: 1rem;
   background: #fff;
+  height: 180px;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 640px) {
+  .container {
+    padding: 1.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding: 1.5rem;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .container {
+    background: #1f2937;
+    border-color: #374151;
+    color: #f9fafb;
+  }
 }
 
 .header {
@@ -15,4 +38,23 @@
 .title {
   margin: 0;
   font-size: 1rem;
+}
+
+@media (min-width: 640px) {
+  .title {
+    font-size: 1.125rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .title {
+    font-size: 1.25rem;
+  }
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

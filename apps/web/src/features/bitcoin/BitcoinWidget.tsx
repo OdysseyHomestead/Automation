@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState, useCallback } from "react";
+import styles from "./BitcoinWidget.module.css";
 
 interface PriceInfo {
   price: number | null;
@@ -45,11 +46,11 @@ export const BitcoinWidget: React.FC = () => {
   }, [fetchPrice]);
 
   if (error) {
-    return <p>Error fetching price: {error}</p>;
+    return <div className={styles.container}><p>Error fetching price: {error}</p></div>;
   }
 
   if (price === null) {
-    return <p>Loading...</p>;
+    return <div className={styles.container}><p>Loading...</p></div>;
   }
 
   const formattedPrice = price.toLocaleString(undefined, {
@@ -58,9 +59,9 @@ export const BitcoinWidget: React.FC = () => {
   });
 
   return (
-    <div>
-      <p>Price: {formattedPrice}</p>
-      <p>Last update: {lastUpdated}</p>
+    <div className={styles.container}>
+      <p className={styles.price}>Price: {formattedPrice}</p>
+      <p className={styles.updated}>Last update: {lastUpdated}</p>
     </div>
   );
 };

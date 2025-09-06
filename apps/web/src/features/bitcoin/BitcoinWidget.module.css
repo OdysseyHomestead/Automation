@@ -1,0 +1,31 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.price {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+@media (min-width: 640px) {
+  .price {
+    font-size: 1.5rem;
+  }
+}
+
+.updated {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+@media (prefers-color-scheme: dark) {
+  .updated {
+    color: #9ca3af;
+  }
+}
