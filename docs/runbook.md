@@ -19,8 +19,8 @@ Visit [http://localhost:8090/\_/](http://localhost:8090/_/) to create the initia
 You can also pull and run PocketBase directly to verify your setup:
 
 ```bash
-docker pull ghcr.io/pocketbase/pocketbase:latest
-docker run --name pb -p 8090:8090 -v pb_data:/pb_data -v pb_public:/pb_public ghcr.io/pocketbase/pocketbase:latest serve --http 0.0.0.0:8090
+docker pull ghcr.io/pocketbase/pocketbase:v0.29.3
+docker run --name pb -p 8090:8090 -v pb_data:/pb_data -v pb_public:/pb_public ghcr.io/pocketbase/pocketbase:v0.29.3 serve --http 0.0.0.0:8090
 ```
 
 Open the admin UI at [http://localhost:8090/\_/](http://localhost:8090/_/) or check the health endpoint:

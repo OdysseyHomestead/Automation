@@ -1,6 +1,6 @@
 services:
   pocketbase:
-    image: ghcr.io/pocketbase/pocketbase:latest
+    image: ghcr.io/pocketbase/pocketbase:v0.29.3
     command: ["serve", "--http", "0.0.0.0:8090"]
     volumes:
       - pb_data:/pb_data
