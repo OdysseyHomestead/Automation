@@ -57,3 +57,18 @@ services:
       - redis
     # The image CMD runs the CLI without a subcommand; append "start" here
     command: ["uv", "run", "python", "-m", "src.interfaces.cli.main", "start"]
+
+  pocketbase:
+    build:
+      context: .
+      dockerfile: infra/pocketbase/Dockerfile
+    ports:
+      - "8090:8080"
+    volumes:
+      - pb_data:/pb/pb_data
+      - pb_public:/pb/pb_public
+    restart: unless-stopped
+
+volumes:
+  pb_data:
+  pb_public:

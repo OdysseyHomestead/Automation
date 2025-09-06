@@ -3,7 +3,7 @@
 ## Running Locally
 
 ```bash
-docker compose -f infra/docker-compose.yml up -d
+docker compose up -d pocketbase
 ```
 
 This builds a PocketBase image from the official release archive and starts it on port `8090`.

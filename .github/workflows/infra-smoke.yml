@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Start PocketBase
-        run: docker compose -f infra/docker-compose.yml up -d
+        run: docker compose up -d pocketbase
       - name: Smoke test
         run: |
           success=false
@@ -31,4 +31,4 @@ jobs:
           fi
       - name: Stop PocketBase
         if: always()
-        run: docker compose -f infra/docker-compose.yml down
+        run: docker compose down
